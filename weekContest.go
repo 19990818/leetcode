@@ -197,69 +197,74 @@ func getMapKey(val string) string {
 	return temp
 }
 
-func productExceptSelf(nums []int) []int {
-	sum := 1
-	sum2 := 1
-	count := 0
-	ans := make([]int, 0)
-	for _, val := range nums {
-		if val == 0 {
-			sum2 *= 1
-			count++
-		} else {
-			sum2 *= val
-		}
-		sum *= val
-	}
-	if count > 1 {
-		sum2 = 0
-	}
-	flag1 := 0
-	if sum < 0 {
-		flag1 = 1
-		sum = -sum
-	}
-	for _, val := range nums {
-		t := 0
-		temp := sum
-		flag2 := 0
-		if val < 0 {
-			flag2 = 1
-			val = -val
-		}
-		if val == 0 {
-			ans = append(ans, sum2)
-			continue
-		}
-		for i := 31; i >= 0; i-- {
-			//fmt.Println(val<<i,temp)
-			if temp >= (val << i) {
-				temp -= val << i
-				t += 1 << i
+func divideString(s string, k int, fill byte) []string {
+	ans := make([]string, 0)
+	for i := 0; i < len(s); i = i + k {
+		if i+k > len(s) {
+			temp := s[i:len(s)]
+			for j := len(s); j < i+k; j++ {
+				temp += string(fill)
 			}
+			ans = append(ans, temp)
+		} else {
+			ans = append(ans, s[i:i+k])
 		}
-		if flag1^flag2 == 1 {
-			t = -t
-		}
-		ans = append(ans, t)
 	}
 	return ans
 }
 
-func singleNumber3(nums []int) []int {
-	num1, num2 := 0, 0
-	xorm := 0
-	for _, val := range nums {
-		xorm ^= val
-	}
-	//得到第一位两者不相同的标志位 用于分为两类
-	pos := xorm & (-xorm)
-	for _, val := range nums {
-		if val&pos != 0 {
-			num1 ^= val
+func minMoves2(target int, maxDoubles int) int {
+	ans := 0
+	for i := target; i > 1; {
+		if i%2 == 0 && maxDoubles > 0 {
+			i = i / 2
+			maxDoubles -= 1
+			ans += 1
 		} else {
-			num2 ^= val
+			i--
+			ans += 1
 		}
 	}
-	return []int{num1, num2}
+	return ans
+}
+
+func mostPoints(questions [][]int) int64 {
+	dp := make([]int64, len(questions))
+	dp[len(questions)-1] = int64(questions[len(questions)-1][0])
+	for i := len(questions) - 2; i >= 0; i-- {
+		if i+questions[i][1]+1 >= len(questions) {
+			dp[i] = max64(int64(questions[i][0]), dp[i+1])
+		} else {
+			dp[i] = max64(int64(questions[i][0])+dp[i+questions[i][1]+1], dp[i+1])
+		}
+		//fmt.Println(dp[i])
+	}
+	return dp[0]
+}
+func max64(a, b int64) int64 {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+func maxRunTime(n int, batteries []int) int64 {
+	if len(batteries) < n {
+		return 0
+	}
+	ans := int64(0)
+	for len(batteries) >= n {
+		sort.Ints(batteries)
+		temp := make([]int, 0)
+		for i := len(batteries) - 1; i >= len(batteries)-n; i-- {
+			batteries[i] -= batteries[len(batteries)-n]
+			ans += int64(batteries[len(batteries)-n])
+			if batteries[i] != 0 {
+				temp = append(temp, batteries[i])
+			}
+		}
+		temp = append(temp, batteries[0:len(batteries)-n+1]...)
+		batteries = temp
+	}
+	return ans
 }
