@@ -1582,25 +1582,6 @@ func isValidBST(root *TreeNode) bool {
 	return true
 }
 
-func recoverTree(root *TreeNode) {
-	res := inorder(root)
-	t1, t2 := 0, 0
-	if res[1] <= res[0] {
-		t1 = res[0]
-	}
-	if res[len(res)-2] > res[len(res)-1] {
-		t2 = res[len(res)-1]
-	}
-	for i := 1; i < len(res)-1; i++ {
-		if res[i] >= res[i-1] && res[i] >= res[i+1] {
-			t1 = res[i]
-		}
-		if res[i] <= res[i-1] && res[i] <= res[i+1] {
-			t2 = res[i]
-		}
-	}
-}
-
 func zigzagLevelOrder(root *TreeNode) [][]int {
 	ans := make([][]int, 0)
 	if root == nil {
@@ -2935,4 +2916,94 @@ func rangeBitwiseAnd(left int, right int) int {
 		}
 	}
 	return ans
+}
+
+func canFinish(numCourses int, prerequisites [][]int) bool {
+	//使用拓扑排序 得到节点的入度和出度
+	in := make([]int, numCourses)
+	out := make([][]int, numCourses)
+	for i := 0; i < len(prerequisites); i++ {
+		in[prerequisites[i][0]]++
+		out[prerequisites[i][1]] = append(out[prerequisites[i][1]], prerequisites[i][0])
+	}
+	q := make([]int, 0)
+	for i := 0; i < numCourses; i++ {
+		if in[i] == 0 {
+			q = append(q, i)
+		}
+	}
+	res := make([]int, 0)
+	for len(q) > 0 {
+		cur := q[0]
+		q = q[1:]
+		res = append(res, cur)
+		for _, val := range out[cur] {
+			in[val]--
+			if in[val] == 0 {
+				q = append(q, val)
+			}
+		}
+	}
+	return len(res) == numCourses
+}
+
+func mostWordsFound(sentences []string) int {
+	ans := 0
+	for _, val := range sentences {
+		ans = max(ans, len(strings.Split(val, " ")))
+	}
+	return ans
+}
+
+func findOrder(numCourses int, prerequisites [][]int) []int {
+	in := make([]int, numCourses)
+	out := make([][]int, numCourses)
+	for i := 0; i < len(prerequisites); i++ {
+		in[prerequisites[i][0]]++
+		out[prerequisites[i][1]] = append(out[prerequisites[i][1]], prerequisites[i][0])
+	}
+	q := make([]int, 0)
+	for i := 0; i < numCourses; i++ {
+		if in[i] == 0 {
+			q = append(q, i)
+		}
+	}
+	res := make([]int, 0)
+	for len(q) > 0 {
+		cur := q[0]
+		q = q[1:]
+		res = append(res, cur)
+		for _, val := range out[cur] {
+			in[val]--
+			if in[val] == 0 {
+				q = append(q, val)
+			}
+		}
+	}
+	return res
+}
+
+func rob2(nums []int) int {
+	if len(nums) == 1 {
+		return nums[0]
+	}
+	dp1 := make([]int, len(nums)-1)
+	dp2 := make([]int, len(nums)-1)
+	dp1[0] = nums[0]
+	dp2[0] = nums[1]
+	for i := 1; i < len(nums)-1; i++ {
+		if i == 1 {
+			dp1[i] = max(nums[i], dp1[i-1])
+		} else {
+			dp1[i] = max(nums[i]+dp1[i-2], dp1[i-1])
+		}
+	}
+	for i := 2; i < len(nums); i++ {
+		if i == 2 {
+			dp2[i-1] = max(nums[i], dp2[i-2])
+		} else {
+			dp2[i-1] = max(nums[i]+dp2[i-3], dp2[i-2])
+		}
+	}
+	return max(dp1[len(nums)-2], dp2[len(nums)-2])
 }
