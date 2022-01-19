@@ -3007,3 +3007,80 @@ func rob2(nums []int) int {
 	}
 	return max(dp1[len(nums)-2], dp2[len(nums)-2])
 }
+
+func findKthLargest(nums []int, k int) int {
+	m := make(map[int]int, 0)
+	for _, val := range nums {
+		if _, ok := m[val]; !ok {
+			m[val] = 1
+		}
+	}
+	numsTemp := make([]int, 0)
+	for _, val := range m {
+		numsTemp = append(numsTemp, val)
+	}
+	nums = numsTemp
+	findKthLargestHelp(nums, 0, len(nums)-1, k)
+	return nums[k-1]
+}
+
+func findKthLargestHelp(nums []int, left, right, k int) {
+	fmt.Println(nums)
+	if right > left {
+		low, high := left, right
+		t := nums[left]
+		for low < high {
+			for nums[high] >= t && low < high {
+				high--
+			}
+			nums[low] = nums[high]
+			for nums[low] <= t && low < high {
+				low++
+			}
+			nums[high] = nums[low]
+		}
+		nums[low] = t
+		if low == len(nums)-k {
+			return
+		}
+		findKthLargestHelp(nums, left, low-1, k)
+		findKthLargestHelp(nums, low+1, right, k)
+	}
+}
+
+func combinationSum3(k int, n int) [][]int {
+	return combinationSum3Help(k, n, 1)
+}
+func combinationSum3Help(k int, n int, start int) [][]int {
+	if k == 1 {
+		if n < 0 || n > 9 {
+			return [][]int{}
+		}
+		return [][]int{{n}}
+	}
+	ans := make([][]int, 0)
+	for i := start; i <= 9; i++ {
+		for _, val := range combinationSum3Help(k-1, n-i, start+1) {
+			if i < val[0] {
+				temp := make([]int, 0)
+				temp = append(temp, i)
+				temp = append(temp, val...)
+				ans = append(ans, temp)
+			}
+
+		}
+	}
+	return ans
+}
+
+func checkString(s string) bool {
+	flag := true
+	for _, val := range s {
+		if val == 'b' {
+			flag = false
+		} else if val == 'a' && flag == false {
+			return false
+		}
+	}
+	return true
+}

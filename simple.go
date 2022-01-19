@@ -7535,3 +7535,15 @@ func threeSum(nums []int) [][]int {
 	}
 	return ans
 }
+
+func checkString2(s string) bool {
+	flag := true
+	for _, val := range s {
+		if val == 'b' {
+			flag = false
+		} else if val == 'a' && flag == false {
+			return false
+		}
+	}
+	return true
+}

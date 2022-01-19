@@ -268,3 +268,7 @@ func maxRunTime(n int, batteries []int) int64 {
 	}
 	return ans
 }
+
+func findKthLargest(nums []int, k int) int {
+
+}
