@@ -269,6 +269,121 @@ func maxRunTime(n int, batteries []int) int64 {
 	return ans
 }
 
-func findKthLargest(nums []int, k int) int {
+func minimumCost(cost []int) int {
+	sort.Ints(cost)
+	sum := 0
+	for i := len(cost) - 1; i >= 0; i = i - 3 {
+		sum += cost[i]
+		sum += cost[i-1]
+	}
+	return sum
+}
 
+func numberOfArrays(differences []int, lower int, upper int) int {
+	temp := make([]int, 0)
+	temp = append(temp, 0)
+	for _, val := range differences {
+		t := temp[len(temp)-1] + val
+		temp = append(temp, t)
+	}
+	maxNum, minNum := 0, 0
+	for _, val := range temp {
+		maxNum = max(maxNum, val)
+		minNum = min(minNum, val)
+	}
+	if maxNum-minNum > upper-lower {
+		return 0
+	}
+	return upper - lower - maxNum + minNum + 1
+}
+
+func highestRankedKItems(grid [][]int, pricing []int, start []int, k int) [][]int {
+	row, col := start[0], start[1]
+	flag := make([][]int, len(grid))
+	for i := 0; i < len(grid); i++ {
+		flag[i] = make([]int, len(grid[0]))
+	}
+	distance := flag
+	//fmt.Println(distance)
+	ans := make([][]int, 0)
+	dequeue := make([][]int, 0)
+	dequeue = append(dequeue, []int{row, col})
+	flag[row][col] = 1
+	for len(dequeue) != 0 {
+		cur := dequeue[0]
+		dequeue = dequeue[1:]
+		if grid[cur[0]][cur[1]] <= pricing[1] && grid[cur[0]][cur[1]] >= pricing[0] {
+			ans = append(ans, []int{cur[0], cur[1]})
+		}
+		temp := make([][]int, 0)
+
+		if cur[0]-1 >= 0 && cur[1] < len(grid[0]) && grid[cur[0]-1][cur[1]] != 0 && flag[cur[0]-1][cur[1]] == 0 {
+			temp = append(temp, []int{cur[0] - 1, cur[1]})
+			flag[cur[0]-1][cur[1]] = 1
+			distance[cur[0]-1][cur[1]] = distance[cur[0]][cur[1]] + 1
+		}
+		if cur[0] < len(grid) && cur[1]-1 >= 0 && grid[cur[0]][cur[1]-1] != 0 && flag[cur[0]][cur[1]-1] == 0 {
+			temp = append(temp, []int{cur[0], cur[1] - 1})
+			flag[cur[0]][cur[1]-1] = 1
+			distance[cur[0]][cur[1]-1] = distance[cur[0]][cur[1]] + 1
+		}
+		if cur[0] < len(grid) && cur[1]+1 < len(grid[0]) && grid[cur[0]][cur[1]+1] != 0 && flag[cur[0]][cur[1]+1] == 0 {
+			temp = append(temp, []int{cur[0], cur[1] + 1})
+			flag[cur[0]][cur[1]+1] = 1
+			distance[cur[0]][cur[1]+1] = distance[cur[0]][cur[1]] + 1
+		}
+		if cur[0]+1 < len(grid) && cur[1] < len(grid[0]) && grid[cur[0]+1][cur[1]] != 0 && flag[cur[0]+1][cur[1]] == 0 {
+			temp = append(temp, []int{cur[0] + 1, cur[1]})
+			flag[cur[0]+1][cur[1]] = 1
+			distance[cur[0]+1][cur[1]] = distance[cur[0]][cur[1]] + 1
+		}
+		//fmt.Println(temp)
+		dequeue = append(dequeue, temp...)
+	}
+	temp := myArr{
+		ans,
+		distance,
+		grid,
+	}
+	//fmt.Println(distance)
+	sort.Sort(temp)
+	//fmt.Println(temp.arr)
+	ans = temp.arr
+	//fmt.Println(ans)
+	if k > len(ans) {
+		return ans
+	}
+	return ans[0:k]
+}
+
+type myArr struct {
+	arr      [][]int
+	distance [][]int
+	grid     [][]int
+}
+
+func (m myArr) Len() int {
+	return len(m.arr)
+}
+
+func (m myArr) Less(i, j int) bool {
+	if m.distance[m.arr[j][0]][m.arr[j][1]] < m.distance[m.arr[i][0]][m.arr[i][1]] {
+		return false
+	} else if m.distance[m.arr[j][0]][m.arr[j][1]] == m.distance[m.arr[i][0]][m.arr[i][1]] {
+		if m.grid[m.arr[j][0]][m.arr[j][1]] < m.grid[m.arr[i][0]][m.arr[i][1]] {
+			return false
+		} else if m.grid[m.arr[j][0]][m.arr[j][1]] == m.grid[m.arr[i][0]][m.arr[i][1]] {
+			if m.arr[j][0] < m.arr[i][0] {
+				return false
+			} else if m.arr[j][0] == m.arr[i][0] {
+				if m.arr[j][1] < m.arr[i][1] {
+					return false
+				}
+			}
+		}
+	}
+	return true
+}
+func (m myArr) Swap(i, j int) {
+	m.arr[i], m.arr[j] = m.arr[j], m.arr[i]
 }
