@@ -39,14 +39,31 @@ func findLonely(nums []int) []int {
 	m := make(map[int]int)
 	ans := make([]int, 0)
 	for _, val := range nums {
-		m[val] = 1
+		m[val]++
 	}
 	for _, val := range nums {
 		_, ok1 := m[val-1]
 		_, ok2 := m[val+1]
-		if !ok1 && !ok2 {
+		if (!ok1 && !ok2) && m[val] == 1 {
 			ans = append(ans, val)
 		}
 	}
 	return ans
+}
+
+func firstPalindrome(words []string) string {
+	for _, val := range words {
+		if isPandlim(val) {
+			return val
+		}
+	}
+	return ""
+}
+func isPandlim(s string) bool {
+	for left, right := 0, len(s); left < right; left, right = left+1, right-1 {
+		if s[left] != s[right] {
+			return false
+		}
+	}
+	return true
 }
