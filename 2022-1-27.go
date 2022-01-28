@@ -67,3 +67,28 @@ func numSquares(n int) int {
 	}
 	return dp[n]
 }
+
+func findDuplicate(nums []int) int {
+	// 通过构建边得到像链表一样的结构 然后就成为了找到环的入口
+	// 只有一个超过两个的入度作为环的节点
+	slow, fast := 0, 0
+	slow = nums[slow]
+	fast = nums[nums[fast]]
+	for slow != fast {
+		slow = nums[slow]
+		fast = nums[nums[fast]]
+	}
+	slow = 0
+	for slow != fast {
+		slow = nums[slow]
+		fast = nums[fast]
+	}
+	return slow
+}
+
+func isSameAfterReversals(num int) bool {
+	if num == 0 {
+		return true
+	}
+	return num%10 != 0
+}
