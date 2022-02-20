@@ -133,3 +133,96 @@ func goodTriplets(nums1 []int, nums2 []int) int64 {
 	}
 	return ans
 }
+
+func countEven(num int) int {
+	count := 0
+	for i := 1; i <= num; i++ {
+		if getNumSum(i)%2 == 0 {
+			count++
+		}
+	}
+	return count
+}
+func getNumSum(num int) int {
+	ans := 0
+	for num > 0 {
+		ans += num % 10
+		num /= 10
+	}
+	return ans
+}
+
+func mergeNodes(head *ListNode) *ListNode {
+	ans := new(ListNode)
+	curAns := ans
+	cur := head.Next
+	temp := 0
+	for cur != nil {
+		if cur.Val == 0 {
+			curAns.Next = &ListNode{temp, nil}
+			curAns = curAns.Next
+			temp = 0
+		} else {
+			temp += cur.Val
+		}
+	}
+	return ans.Next
+}
+
+func repeatLimitedString(s string, repeatLimit int) string {
+	sMap := make([]int, 26)
+	for _, val := range s {
+		sMap[val-'a']++
+	}
+	ans := make([]byte, 0)
+	//先把z用完 以此类推
+	for {
+		temp := len(ans)
+		for i := 0; i < 26; i++ {
+			if sMap[25-i] == 0 {
+				continue
+			}
+			if len(ans) == 0 || int(ans[len(ans)-1]) != 'z'-i {
+				count2 := 0
+				for sMap[25-i] > 0 {
+					if count2 >= repeatLimit {
+						j := i + 1
+						for ; j < 26; j++ {
+							if sMap[25-j] > 0 {
+								ans = append(ans, byte('z'-j))
+								sMap[25-j]--
+								count2 = 0
+								break
+							}
+						}
+						if j == 26 {
+							break
+						}
+
+					} else {
+						sMap[25-i]--
+						ans = append(ans, byte('z'-i))
+						count2++
+					}
+				}
+			}
+		}
+		//fmt.Println(temp,ans)
+		if temp == len(ans) {
+			break
+		}
+	}
+	return string(ans)
+}
+
+func coutPairs(nums []int, k int) int64 {
+	ans := int64(0)
+	for i := 0; i < len(nums); i++ {
+		for j := i + 1; j < len(nums); j++ {
+			if (i+1)*(j+1)%k == 0 {
+				ans += int64((i + 1) * (j + 1))
+			}
+		}
+	}
+	return ans
+}
