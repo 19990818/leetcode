@@ -44,39 +44,53 @@ func (this *NumMatrix) SumRegion(row1 int, col1 int, row2 int, col2 int) int {
 }
 
 type NumArray struct {
-	nums   []int
-	posSum []int
-	differ map[int]int
+	nums []int
+	tree []int
 }
 
 func ConstructorNumArray(nums []int) NumArray {
 	temp := NumArray{nums: nums}
-	sum := make([]int, len(nums))
-	differ := make(map[int]int)
-	for i := 0; i < len(nums); i++ {
-		if i == 0 {
-			sum[i] = nums[i]
-		} else {
-			sum[i] = sum[i-1] + nums[i]
-		}
-		differ[i] = 0
+	tree := make([]int, 2*len(nums))
+	for i := len(nums); i < 2*len(nums); i++ {
+		tree[i] = nums[i-len(nums)]
 	}
-	temp.posSum = sum
-	temp.differ = differ
+	for i := len(nums) - 1; i > 0; i-- {
+		tree[i] = tree[2*i] + tree[2*i+1]
+	}
 	return temp
 }
 
 func (this *NumArray) Update(index int, val int) {
-	this.differ[index] += val - this.nums[index]
+	pos := index + len(this.nums)
+	this.tree[pos] -= (this.nums[index] - val)
+	for pos > 1 {
+		left, right := pos, pos
+		if pos%2 == 0 {
+			right++
+		} else {
+			left--
+		}
+		this.tree[pos/2] = this.tree[left] + this.tree[right]
+		pos /= 2
+	}
 	this.nums[index] = val
 }
 
 func (this *NumArray) SumRange(left int, right int) int {
-	ans := this.posSum[right] - this.posSum[left] + this.nums[left]
-	for _, val := range this.differ {
-		ans += val
+	sum := 0
+	for left <= right {
+		if left%2 == 1 {
+			sum += this.tree[left]
+			left++
+		}
+		if right%2 == 0 {
+			sum += this.tree[right]
+			right--
+		}
+		left /= 2
+		right /= 2
 	}
-	return ans
+	return sum
 }
 
 func maxProfit(prices []int) int {
