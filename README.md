@@ -1,2 +1,2 @@
 # leetcode
-使用go解题
+使用golang解决leetcode中存在的问题
