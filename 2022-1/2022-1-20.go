@@ -1,5 +1,44 @@
 package main
 
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
+func max64(a, b int64) int64 {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+func abs(a int) int {
+	if a < 0 {
+		return -a
+	}
+	return a
+}
+
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
+type ListNode struct {
+	Val  int
+	Next *ListNode
+}
+
 func containsNearbyAlmostDuplicate(nums []int, k int, t int) bool {
 	for x1 := 0; x1 < len(nums)-1; x1++ {
 		for x2 := x1 + 1; x2 <= x1+k; x2++ {

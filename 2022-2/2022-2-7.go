@@ -5,6 +5,38 @@ import (
 	"sort"
 )
 
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
+func max64(a, b int64) int64 {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
+type ListNode struct {
+	Val  int
+	Next *ListNode
+}
+
 func minCostSetTime(startAt int, moveCost int, pushCost int, targetSeconds int) int {
 	minute := targetSeconds / 60
 	second := targetSeconds % 60
