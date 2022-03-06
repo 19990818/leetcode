@@ -6,6 +6,17 @@ import (
 	"strings"
 )
 
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
+type ListNode struct {
+	Val  int
+	Next *ListNode
+}
+
 func transformArray(arr []int) []int {
 	flag := 1
 	for flag == 1 {

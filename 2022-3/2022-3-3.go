@@ -250,3 +250,10 @@ func sortTransformedArray(nums []int, a int, b int, c int) []int {
 func f(x, a, b, c int) int {
 	return a*x*x + b*x + c
 }
+
+func abs(a int) int {
+	if a < 0 {
+		return -a
+	}
+	return a
+}

@@ -7,6 +7,26 @@ import (
 	"strings"
 )
 
+type arr [][]int
+
+func (m arr) Len() int {
+	return len(m)
+}
+
+func (m arr) Less(i, j int) bool {
+	return m[i][0] < m[j][0]
+}
+
+func (m arr) Swap(i, j int) {
+	m[i], m[j] = m[j], m[i]
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
 func sumOfDigits(nums []int) int {
 	minNum := math.MaxInt64
 	for _, val := range nums {
