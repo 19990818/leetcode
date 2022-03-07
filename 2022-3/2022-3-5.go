@@ -38,6 +38,7 @@ func canMeasureWater(jug1Capacity int, jug2Capacity int, targetCapacity int) boo
 	return false
 }
 
+//统计key之后的元素个数，得到最大元素个数大小
 func mostFrequent(nums []int, key int) int {
 	m := make(map[int]int)
 	for i := 0; i < len(nums)-1; i++ {
@@ -56,6 +57,8 @@ func mostFrequent(nums []int, key int) int {
 	return ans
 }
 
+//排序问题，直接调用go sort 可知go sort的排序是稳定的
+//需要自己定义接口实现，使用len,less,swap
 func sortJumbled(mapping []int, nums []int) []int {
 	a := arrNum{nums, mapping}
 	sort.Sort(a)
@@ -87,6 +90,9 @@ func (m arrNum) Swap(i, j int) {
 	m.arr[i], m.arr[j] = m.arr[j], m.arr[i]
 }
 
+//深度优先遍历得到祖先节点
+//在之前的算法中判断是否元素存在，导致内存不足出错
+//使用map标记节点是否被加入可有效减少内存消耗
 func getAncestors(n int, edges [][]int) [][]int {
 	m := make(map[int][]int)
 	for _, val := range edges {
@@ -114,81 +120,6 @@ func getAncestors(n int, edges [][]int) [][]int {
 		}
 		sort.Ints(temp)
 		ans[i] = temp
-	}
-	return ans
-}
-
-func cellsInRange(s string) []string {
-	col1, col2 := rune(s[0]), rune(s[3])
-	row1, row2 := rune(s[1]), rune(s[4])
-	ans := make([]string, 0)
-	for i := col1; i <= col2; i++ {
-		for j := row1; j <= row2; j++ {
-			temp := string(i) + string(j)
-			ans = append(ans, temp)
-		}
-	}
-	return ans
-}
-
-func minimalKSum(nums []int, k int) int64 {
-	ans := int64(0)
-	for i := 0; i <= len(nums); i++ {
-		if i == 0 && nums[i] > 1 {
-			j := min(k, nums[0]-1)
-			ans += getRangeSum(1, nums[0]+j+1)
-			k -= j
-		} else if nums[i] > nums[i-1]+1 {
-			j := min(k, nums[i]-nums[i-1]-1)
-			ans += getRangeSum(nums[i-1]+1, nums[i-1]+j)
-			k -= j
-		} else if i == len(nums) {
-			ans += getRangeSum(nums[i-1]+1, nums[i-1]+k)
-		}
-	}
-	return ans
-}
-func getRangeSum(left, right int) int64 {
-	if left < right {
-		return 0
-	}
-	return int64(right+left) * int64(right-left+1) / 2
-}
-
-func createBinaryTree(descriptions [][]int) *TreeNode {
-	m := make(map[int]*TreeNode)
-	mFlag := make(map[int]int)
-	for _, val := range descriptions {
-		var temp *TreeNode
-		if _, ok := m[val[0]]; !ok {
-			temp := new(TreeNode)
-			temp.Val = val[0]
-			m[val[0]] = temp
-			if _, ok := mFlag[val[0]]; !ok {
-				mFlag[val[0]] = 0
-			}
-		}
-		temp = m[val[0]]
-		var tempchild *TreeNode
-		if _, ok := m[val[1]]; !ok {
-			tempchild := new(TreeNode)
-			tempchild.Val = val[1]
-			m[val[1]] = tempchild
-		}
-		tempchild = m[val[1]]
-		mFlag[val[1]] = 1
-		if val[2] == 1 {
-			temp.Left = tempchild
-		} else {
-			temp.Right = tempchild
-		}
-	}
-	var ans *TreeNode
-	for key, val := range mFlag {
-		if val == 0 {
-			ans = m[key]
-			break
-		}
 	}
 	return ans
 }
