@@ -55,6 +55,8 @@ func reconstructQueue(people [][]int) [][]int {
 	return ans
 }
 
+// 判断一个子串可以将某个点确定下来得到以其结束的动态转移方程
+// 因为会对每个点进行确定 所以所有情况均会得到讨论
 func numberOfArithmeticSlices(nums []int) int {
 	if len(nums) < 3 {
 		return 0
