@@ -79,7 +79,3 @@ func maximumTop(nums []int, k int) int {
 	//len(nums)==0 k>1
 	return pending[len(pending)-1]
 }
-
-func minimumWeight(n int, edges [][]int, src1 int, src2 int, dest int) int64 {
-
-}
