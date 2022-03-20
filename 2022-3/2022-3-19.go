@@ -1,6 +1,9 @@
 package main
 
-import "sort"
+import (
+	"container/heap"
+	"sort"
+)
 
 type Node4Ary struct {
 	Val         bool
@@ -197,4 +200,46 @@ func halveArray(nums []int) int {
 
 	}
 	return op
+}
+
+func halveArray2(nums []int) int {
+	sum := 0.0
+	h := digitHeap{}
+	heap.Init(&h)
+	for _, val := range nums {
+		sum += float64(val)
+		heap.Push(&h, float64(val))
+	}
+	target := sum / 2
+	sumMinus := 0.0
+	ans := 0
+	for sumMinus < target {
+		temp := heap.Pop(&h)
+		sumMinus += temp.(float64) / 2
+		heap.Push(&h, temp.(float64)/2)
+		ans++
+	}
+	return ans
+}
+
+//构造大根堆函数
+type digitHeap []float64
+
+func (h digitHeap) Len() int {
+	return len(h)
+}
+func (h digitHeap) Less(i, j int) bool {
+	return h[i] > h[j]
+}
+func (h digitHeap) Swap(i, j int) {
+	h[i], h[j] = h[j], h[i]
+}
+func (h *digitHeap) Push(x interface{}) {
+	*h = append(*h, x.(float64))
+}
+func (h *digitHeap) Pop() interface{} {
+	old := *h
+	num := old[len(old)-1]
+	*h = old[0 : len(old)-1]
+	return num
 }
