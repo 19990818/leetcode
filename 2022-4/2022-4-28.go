@@ -6,6 +6,10 @@ import (
 )
 
 func findDuplicateSubtrees(root *TreeNode) []*TreeNode {
+	//通过将所有的子树进行序列化 再通过hash表判断重复
+	//通过将空节点也进行表示，则可以通过前序后序唯一确定子树
+	//因为前序 后序可以唯一确定根节点 然后有空节点可以确定子树的结束
+	//中序无法确定根节点在哪
 	ans := make([]*TreeNode, 0)
 	m := make(map[string]int)
 	var dfs func(root *TreeNode) string
@@ -48,6 +52,7 @@ func constructMaximumBinaryTree(nums []int) *TreeNode {
 }
 
 func printTree(root *TreeNode) [][]string {
+	//数学方法
 	var getHight func(root *TreeNode) int
 	getHight = func(root *TreeNode) int {
 		if root == nil {
