@@ -52,9 +52,9 @@ func minimumDeleteSum(s1 string, s2 string) int {
 		dp[i] = make([]int, n+1)
 	}
 	for i := 1; i < m+1; i++ {
-		c1 := s1[i]
+		c1 := s1[i-1]
 		for j := 1; j < n+1; j++ {
-			c2 := s2[i]
+			c2 := s2[j-1]
 			if c1 == c2 {
 				dp[i][j] = dp[i-1][j-1] + int(c1)
 			} else {
