@@ -60,24 +60,3 @@ func (m stock) Less(i, j int) bool {
 func (m stock) Swap(i, j int) {
 	m[i], m[j] = m[j], m[i]
 }
-
-func totalStrength(strength []int) int {
-	sum := make([]int, 0)
-	minNum := make([]int, 0)
-	for idx, val := range strength {
-		if idx == 0 {
-			sum = append(sum, val)
-			minNum = append(minNum, val)
-		} else {
-			sum = append(sum, sum[len(sum)-1]+val)
-			minNum = append(minNum, min(minNum[len(minNum)-1], val))
-		}
-	}
-	mod := 1e9 + 7
-	ans := 0
-	for i := 0; i < len(strength); i++ {
-		for j := i; j < len(strength); j++ {
-			tempSum:=
-		}
-	}
-}

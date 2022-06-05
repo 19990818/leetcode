@@ -85,22 +85,3 @@ func checkValidString(s string) bool {
 	}
 	return count == len(stack)
 }
-
-func findRedundantConnection(edges [][]int) []int {
-	m := make(map[int]int)
-	ans := make([]int, 2)
-	n := len(edges)
-	for _, val := range edges {
-		if n == 0 {
-			ans = []int{val[0], val[1]}
-		}
-		if m[val[0]] == 0 {
-			n--
-		}
-		if m[val[1]] == 0 {
-			n--
-		}
-		m[val[0]], m[val[1]] = 1, 1
-	}
-	return ans
-}
