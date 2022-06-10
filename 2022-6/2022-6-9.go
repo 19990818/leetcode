@@ -80,32 +80,3 @@ func poorPigs(buckets int, minutesToDie int, minutesToTest int) int {
 	}
 	return left
 }
-
-func getMaxRepetitions(s1 string, n1 int, s2 string, n2 int) int {
-	i, j := 0, 0
-	s1count, s2count := 0, 0
-	for {
-		if i == 0 {
-			s1count++
-		}
-		if j == 0 {
-			s2count++
-		}
-		if s1[i] == s2[j] {
-			j = (j + 1) % len(s2)
-		}
-		i = (i + 1) % len(s1)
-		if i == 0 && j == 0 {
-			break
-		}
-	}
-	return n1 * s1count / n2 * s2count
-}
-"acb"
-4
-"ab"
-2
- "acb"
-1
- "acb"
-1
