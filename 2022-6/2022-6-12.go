@@ -103,3 +103,30 @@ func distributeCookies(cookies []int, k int) int {
 // 	}
 // 	return ans
 // }
+
+func findAndReplacePattern(words []string, pattern string) []string {
+	ans := make([]string, 0)
+	for _, val := range words {
+		m1 := make(map[byte]byte)
+		m2 := make(map[byte]byte)
+		flag := 0
+		for i := 0; i < len(val); i++ {
+			if _, ok := m1[val[i]]; !ok {
+				m1[val[i]] = pattern[i]
+			} else if pattern[i] != m1[val[i]] {
+				flag = 1
+				break
+			}
+			if _, ok := m2[pattern[i]]; !ok {
+				m2[pattern[i]] = val[i]
+			} else if val[i] != m2[pattern[i]] {
+				flag = 1
+				break
+			}
+		}
+		if flag == 0 {
+			ans = append(ans, val)
+		}
+	}
+	return ans
+}
