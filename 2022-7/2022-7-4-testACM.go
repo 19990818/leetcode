@@ -19,7 +19,7 @@ import "fmt"
 // }
 
 //动态规划不能重复需要从大的开始 从小的开始会在后面重复选择较小值
-func main() {
+func main1() {
 	var n, m int
 	fmt.Scan(&n, &m)
 	vs := make([][]int, 0)
