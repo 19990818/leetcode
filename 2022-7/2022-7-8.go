@@ -1,6 +1,7 @@
 package main
 
 import (
+	"math"
 	"sort"
 )
 
@@ -85,59 +86,50 @@ func latestTimeCatchTheBus(buses []int, passengers []int, capacity int) int {
 	return 0
 }
 
-// func minSumSquareDiff(nums1 []int, nums2 []int, k1 int, k2 int) int64 {
-// 	sub := make([]int, 0)
-// 	sum := 0
-// 	for i := range nums1 {
-// 		if nums1[i] > nums2[i] {
-// 			sub = append(sub, nums1[i]-nums2[i])
-// 		} else {
-// 			sub = append(sub, nums2[i]-nums1[i])
-// 		}
-// 		sum += sub[i]
-// 	}
-// 	if sum <= k1+k2 {
-// 		return 0
-// 	}
-// 	sort.Ints(sub)
-// 	ans := int64(0)
-// 	cnt := k1 + k2
-// 	var pow2 func(a int) int64
-// 	pow2 = func(a int) int64 {
-// 		return int64(a * a)
-// 	}
-// 	stack := digit{}
-// 	heap.Init(&stack)
-// 	for _, val := range sub {
-// 		heap.Push(&stack, val)
-// 	}
-// 	for cnt > 0 {
-// 		cnt2 := 0
-// 		for {
-// 			cur := heap.Pop(&stack).(int)
-// 			if len(stack) == 0 {
-// 				if cur > cnt {
-// 					cur -= cnt
-// 				} else {
-// 					cur = 0
-// 				}
-// 				heap.Push(&stack, cur)
-// 			}
-// 			cur2 := heap.Pop(&stack).(int)
-
-// 		}
-// 		cur := heap.Pop(&stack).(int)
-// 		if cur == 0 {
-// 			break
-// 		}
-// 		cur2 := heap.Pop(&stack).(int)
-// 		cnt -= min(cur-cur2+1, cnt)
-// 		heap.Push(&stack, cur2)
-// 		heap.Push(&stack, cur-min(cur-cur2+1, cnt))
-// 	}
-// 	for len(stack) > 0 {
-// 		cur := heap.Pop(&stack).(int)
-// 		ans += pow2(cur)
-// 	}
-// 	return ans
-// }
+func minSumSquareDiff(nums1 []int, nums2 []int, k1 int, k2 int) int64 {
+	//总是跳进自己误认为正确的地方无法自拔
+	sub := make([]int, 0)
+	sum := 0
+	for i := range nums1 {
+		if nums1[i] > nums2[i] {
+			sub = append(sub, nums1[i]-nums2[i])
+		} else {
+			sub = append(sub, nums2[i]-nums1[i])
+		}
+		sum += sub[i]
+	}
+	if sum <= k1+k2 {
+		return 0
+	}
+	sort.Ints(sub)
+	n := len(sub)
+	ans := int64(0)
+	//使用优先队列超时 没有充分利用性质 时间消耗太大
+	cnt := k1 + k2
+	var pow2 func(a int) int64
+	pow2 = func(a int) int64 {
+		return int64(a * a)
+	}
+	//我们会将后面的都减到一样大
+	pre := 0
+	//fmt.Println(sub)
+	for i := 0; i < n; i++ {
+		if x := int(math.Ceil(float64(sum-cnt-pre) / float64(n-i))); x <= sub[i] {
+			cnt2 := cnt - sum + pre + (n-i)*x
+			for j := i; j < n; j++ {
+				sub[j] = x
+				if cnt2 > 0 {
+					sub[j]--
+					cnt2--
+				}
+			}
+			break
+		}
+		pre += sub[i]
+	}
+	//fmt.Println(sub)
+	for _, val := range sub {
+		ans += pow2(val)
+	}
+	return ans
+}
