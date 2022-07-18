@@ -1,6 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"strings"
+	"unicode"
+)
 
 //go使用fmt标准化输入输出
 // func getMaxBottles(a int) int {
@@ -70,4 +76,30 @@ func dpSolve(vs [][]int, total int, ps map[int]int, cs map[int][]int) int {
 		//fmt.Println(dp)
 	}
 	return dp[total]
+}
+
+func main2() {
+	var s string
+	input := bufio.NewScanner(os.Stdin)
+
+	for input.Scan() {
+		s = input.Text()
+		var temp strings.Builder
+		for _, val := range s {
+			if unicode.IsLetter(val) {
+				temp.WriteRune(val)
+			} else {
+				temp.WriteRune(' ')
+			}
+		}
+		s = temp.String()
+		sArr := strings.Split(s, " ")
+		s2Arr := make([]string, 0)
+		for i := len(sArr) - 1; i >= 0; i-- {
+			if sArr[i] != "" {
+				s2Arr = append(s2Arr, sArr[i])
+			}
+		}
+		fmt.Println(strings.Join(s2Arr, " "))
+	}
 }
