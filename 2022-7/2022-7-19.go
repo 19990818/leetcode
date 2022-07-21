@@ -87,7 +87,7 @@ func permutation(S string) []string {
 func permutation2(S string) []string {
 	m := make(map[byte]int)
 	//我们将每个字符的数量进行一个统计
-	// 会出现相同的字符串
+	// 会出现相同的字符串 如果
 	m2 := make(map[string]int)
 	for i := range S {
 		m[S[i]]++
@@ -101,6 +101,7 @@ func permutation2(S string) []string {
 	temp := make([]byte, 0)
 	var dfs func(cur int)
 	dfs = func(cur int) {
+		//fmt.Println(cur)
 		if cur == n {
 			if m2[string(temp)] == 0 {
 				m2[string(temp)] = 1
