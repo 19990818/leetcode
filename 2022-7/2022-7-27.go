@@ -101,15 +101,3 @@ func (this *NumberContainers) Find(number int) int {
 	}
 	return this.numM[number].Left().Key.(int)
 }
-func twoSum(nums []int, target int) []int {
-	m := make(map[int]int)
-	for i, val := range nums {
-		m[val] = i
-	}
-	for i, val := range nums {
-		if _, ok := m[target-val]; ok {
-			return []int{i, m[target-val]}
-		}
-	}
-	return []int{-1, -1}
-}
