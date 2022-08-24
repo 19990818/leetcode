@@ -1,5 +1,7 @@
 package main
 
+import "math"
+
 func orangesRotting(grid [][]int) int {
 	m, n := len(grid), len(grid[0])
 	cnt1 := 0
@@ -42,4 +44,31 @@ func orangesRotting(grid [][]int) int {
 		return -1
 	}
 	return ans
+}
+
+func largestSumOfAverages(nums []int, k int) float64 {
+	n := len(nums)
+	dp := make([][]float64, n)
+	for i := range dp {
+		dp[i] = make([]float64, k+1)
+	}
+	sum := make([]int, n)
+	for i, val := range nums {
+		if i == 0 {
+			sum[i] = val
+		} else {
+			sum[i] = sum[i-1] + val
+		}
+	}
+	for i := 0; i < n; i++ {
+		dp[i][1] = float64(sum[i]) / float64(i+1)
+	}
+	for i := 0; i < n; i++ {
+		for c := 2; c <= k && c <= i+1; c++ {
+			for j := 0; j < i; j++ {
+				dp[i][c] = math.Max(dp[i][c], dp[j][c-1]+float64(sum[i]-sum[j])/float64(i-j))
+			}
+		}
+	}
+	return dp[n-1][k]
 }
