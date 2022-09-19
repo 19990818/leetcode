@@ -52,21 +52,63 @@ func matchPlayersAndTrainers(players []int, trainers []int) int {
 	return ans
 }
 
+// 有时候双重循环并不就是n2复杂度 其中一个循环可能只需要lgn
 func smallestSubarrays(nums []int) []int {
-	n := len(nums)
-	ans := make([]int, n)
-	ans[n-1] = 1
-	or := nums[n-1]
-	j := n - 1
-	for i := n - 2; i >= 0; i-- {
-		for or|nums[i] != or {
-			ans[i] = j - i + 1
-			i--
+	ans := make([]int, len(nums))
+	ans[0] = 1
+	for i := 1; i < len(nums); i++ {
+		ans[i] = 1
+		for j := i - 1; j >= 0 && nums[j]|nums[i] != nums[j]; j-- {
+			// nums[j]实际上是当前i能够得到的最大的集合
+			// 循环体内说明需要将nums[i]加入集合中
+			// 因为对于每个j最多增加32次2^32符合题目数据范围
+			// 因此实际上第二层循环为常数量级
+			nums[j] |= nums[i]
+			ans[j] = i - j + 1
 		}
-		for or|nums[j] == or {
-			j--
+	}
+	return ans
+}
+
+func sumPrefixScores(words []string) []int {
+	root := &preTree{key: '#', val: 0}
+	for _, val := range words {
+		root.Insert(val)
+	}
+	ans := make([]int, len(words))
+	for i, val := range words {
+		ans[i] = root.Query(val)
+	}
+	return ans
+}
+
+type preTree struct {
+	key   byte
+	val   int
+	child [26]*preTree
+}
+
+func (r *preTree) Insert(str string) {
+	root := r
+	for i := 0; i < len(str); i++ {
+		if root.child[int(str[i]-'a')] == nil {
+			root.child[int(str[i]-'a')] = &preTree{key: str[i], val: 1}
+		} else {
+			root.child[int(str[i]-'a')].val += 1
 		}
-		ans[i] = j - i + 1
+		root = root.child[int(str[i]-'a')]
+	}
+}
+
+func (r *preTree) Query(str string) int {
+	root := r
+	ans := 0
+	for i := 0; i < len(str); i++ {
+		if root.child[int(str[i]-'a')] == nil {
+			break
+		}
+		ans += root.child[int(str[i]-'a')].val
+		root = root.child[int(str[i]-'a')]
 	}
 	return ans
 }
