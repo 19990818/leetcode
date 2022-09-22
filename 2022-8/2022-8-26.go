@@ -42,17 +42,17 @@ type stack struct {
 	arr []int
 }
 
-func (this stack) pop() int {
+func (this *stack) pop() int {
 	res := this.arr[len(this.arr)-1]
 	this.arr = this.arr[0 : len(this.arr)-1]
 	return res
 }
-func (this stack) push(val int) {
+func (this *stack) push(val int) {
 	this.arr = append(this.arr, val)
 }
-func (this stack) empty() bool {
+func (this *stack) empty() bool {
 	return len(this.arr) == 0
 }
-func (this stack) peek() int {
+func (this *stack) peek() int {
 	return this.arr[len(this.arr)-1]
 }
