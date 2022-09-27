@@ -1,7 +1,5 @@
 package main
 
-import "sort"
-
 func minimumMoney(transactions [][]int) int64 {
 	backMax := 0
 	ans := int64(0)
@@ -54,38 +52,4 @@ func spiralMatrixIII(rows int, cols int, rStart int, cStart int) [][]int {
 		cnt++
 	}
 	return ans
-}
-
-func possibleBipartition(n int, dislikes [][]int) bool {
-	m1, m2 := make(map[int]int), make(map[int]int)
-	sort.Slice(dislikes, func(i, j int) bool {
-		return dislikes[i][0] < dislikes[j][0]
-	})
-	for _, dislike := range dislikes {
-		if m1[dislike[0]] == 1 && m2[dislike[0]] == 1 {
-			return false
-		}
-		if m1[dislike[1]] == 1 && m2[dislike[1]] == 1 {
-			return false
-		}
-		if m1[dislike[0]] == 1 && m1[dislike[1]] == 1 {
-			return false
-		}
-		if m2[dislike[1]] == 1 && m2[dislike[0]] == 1 {
-			return false
-		}
-		if m1[dislike[0]] == 1 {
-			m2[dislike[1]] = 1
-		} else if m2[dislike[0]] == 1 {
-			m1[dislike[1]] = 1
-		} else if m1[dislike[1]] == 1 {
-			m2[dislike[0]] = 1
-		} else if m2[dislike[1]] == 1 {
-			m1[dislike[0]] = 1
-		} else {
-			m1[dislike[0]] = 1
-			m2[dislike[1]] = 1
-		}
-	}
-	return true
 }
