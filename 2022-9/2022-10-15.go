@@ -58,7 +58,3 @@ func minimizeArrayValue(nums []int) int {
 	}
 	return ans
 }
-
-func componentValue(nums []int, edges [][]int) int {
-
-}

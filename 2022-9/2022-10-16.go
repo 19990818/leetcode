@@ -69,7 +69,6 @@ func countSubarrays(nums []int, minK int, maxK int) int64 {
 		if nums[0] < maxK && nums[0] > minK {
 			dp[0][0] = 1
 		}
-
 	}
 	for i := 1; i < len(nums); i++ {
 		if nums[i] <= maxK && nums[i] >= minK {
