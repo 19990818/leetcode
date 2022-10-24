@@ -88,3 +88,30 @@ func pathInZigZagTree(label int) []int {
 	}
 	return temp
 }
+
+type StockSpanner struct {
+	cur   int
+	stack []int
+	num   []int
+}
+
+func Constructor2() StockSpanner {
+	return StockSpanner{0, make([]int, 0), make([]int, 0)}
+}
+
+func (this *StockSpanner) Next(price int) int {
+	res := 0
+	for len(this.stack) > 0 && this.num[len(this.num)-1] <= price {
+		this.num = this.num[0 : len(this.num)-1]
+		this.stack = this.stack[0 : len(this.stack)-1]
+	}
+	if len(this.stack) == 0 {
+		res = this.cur + 1
+	} else {
+		res = this.cur - this.stack[len(this.stack)-1]
+	}
+	this.stack = append(this.stack, this.cur)
+	this.num = append(this.num, price)
+	this.cur++
+	return res
+}
