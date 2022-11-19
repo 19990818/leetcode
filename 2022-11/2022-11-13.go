@@ -1,7 +1,5 @@
 package main
 
-import "sort"
-
 func convertTemperature(celsius float64) []float64 {
 	res := make([]float64, 2)
 	res[0] = celsius + 273.15
@@ -43,22 +41,6 @@ type TreeNode struct {
 	Right *TreeNode
 }
 
-func minimumOperations(root *TreeNode) int {
-	res := 0
-	arr := order(root)
-	for _, v := range arr {
-		target := append([]int{}, v...)
-		sort.Ints(target)
-		diff := 0
-		for i := range target {
-			if target[i] != v[i] {
-				diff++
-			}
-		}
-		res += (diff + 1) / 2
-	}
-	return res
-}
 func order(root *TreeNode) [][]int {
 	res := make([][]int, 0)
 	q := []*TreeNode{root}
