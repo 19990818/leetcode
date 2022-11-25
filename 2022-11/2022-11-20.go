@@ -54,7 +54,7 @@ func minimumFuelCost(roads [][]int, seats int) int64 {
 		out[v[0]] = append(out[v[0]], v[1])
 		out[v[1]] = append(out[v[1]], v[0])
 	}
-	order := make([][]int, n)
+	order := make([][]int, 0)
 	vis := make([]bool, n)
 	q := []int{0}
 	vis[0] = true
@@ -73,19 +73,21 @@ func minimumFuelCost(roads [][]int, seats int) int64 {
 		}
 		order = append(order, temp)
 	}
+    //fmt.Println(order)
 	ans := int64(0)
 	sum := make([]int, n)
 	vis2 := make([]bool, n)
 	for i := len(order) - 1; i > 0; i-- {
 		for _, v := range order[i] {
-			ans += int64(sum[v]+1)/int64(seats) + 1
+			ans += int64(sum[v]+seats)/int64(seats)
 			vis2[v] = true
 			for _, v2 := range out[v] {
 				if !vis2[v2] {
-					sum[v2] += sum[v]
+					sum[v2] += sum[v]+1
 				}
 			}
 		}
 	}
+    //fmt.Println(sum)
 	return ans
 }
