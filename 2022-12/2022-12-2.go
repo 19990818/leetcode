@@ -22,7 +22,6 @@ func getCost(boxes string) []int {
 	sum := 0
 	pre := make([]int, len(boxes)+1)
 	for i := 0; i < len(boxes); i++ {
-
 		pre[i+1] = pre[i] + sum
 		if boxes[i] == '1' {
 			sum++
