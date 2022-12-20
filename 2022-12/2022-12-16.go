@@ -7,4 +7,5 @@ func minElements(nums []int, limit int, goal int) int {
 	for _, v := range nums {
 		sum += v
 	}
-	return int(math.Ceil(float64(abs(sum-goal)/float64(limit))))
+	return int(math.Ceil(float64(abs(sum-goal))/float64(limit)))
+}
